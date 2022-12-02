@@ -1,3 +1,5 @@
+// undirected graph
+
 #include<iostream>
 using namespace std;
 int vertArr[20][20]; //the adjacency matrix initially 0
