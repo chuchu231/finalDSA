@@ -17,7 +17,7 @@ void add_edge(int u, int v) {       //function to add edge into the matrix
    vertArr[u][v] = 1;
    vertArr[v][u] = 1;
 }
-main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
    int v = 6;    //there are 6 vertices in the graph
    add_edge(0, 4);
    add_edge(0, 3);
