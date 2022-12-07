@@ -60,12 +60,6 @@ void findpaths(vector<vector<int> >& g, int src, int dst, int v)
     }
 }
 
-void addEdge(vector<vector<int> > g,int u, int v)
-{
-    g[u].push_back(v);
-    g[v].push_back(u);
-}
-
 // driver program
 int main()
 {
