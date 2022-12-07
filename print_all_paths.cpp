@@ -1,112 +1,97 @@
-// C++ program to print all paths
-// from a source to destination.
+// C++ program to print all paths of source to
+// destination in given graph
 #include <iostream>
-#include <list>
+#include <vector>
+#include <queue>
 using namespace std;
 
-// An undirected graph using
-// adjacency list representation
-class Graph {
-    int V; // No. of vertices in graph
-    list<int>* adj; // Pointer to an array containing
-                    // adjacency lists
-
-    // A recursive function used by printAllPaths()
-    void printAllPathsUtil(int, int, bool[], int[], int&);
-
-public:
-    Graph(int V); // Constructor
-    void addEdge(int u, int v);
-    void printAllPaths(int s, int d);
-};
-
-Graph::Graph(int V)
+// utility function for printing
+// the found path in graph
+void printpath(vector<int>& path)
 {
-    this->V = V;
-    adj = new list<int>[V];
+    int size = path.size();
+    for (int i = 0; i < size; i++)
+        cout << path[i] << " ";
+    cout << endl;
 }
 
-void Graph::addEdge(int u, int v)
+// utility function to check if current
+// vertex is already present in path
+int isNotVisited(int x, vector<int>& path)
 {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+    int size = path.size();
+    for (int i = 0; i < size; i++)
+        if (path[i] == x)
+            return 0;
+    return 1;
 }
 
-// Prints all paths from 's' to 'd'
-void Graph::printAllPaths(int s, int d)
+// utility function for finding paths in graph
+// from source to destination
+void findpaths(vector<vector<int> >& g, int src, int dst, int v)
 {
-    // Mark all the vertices as not visited
-    bool* visited = new bool[V];
+    // create a queue which stores
+    // the paths
+    queue<vector<int> > q;
 
-    // Create an array to store paths
-    int* path = new int[V];
-    int path_index = 0; // Initialize path[] as empty
+    // path vector to store the current path
+    vector<int> path;
+    path.push_back(src);
+    q.push(path);
+    while (!q.empty()) {
+        path = q.front();
+        q.pop();
+        int last = path[path.size() - 1];
 
-    // Initialize all vertices as not visited
-    for (int i = 0; i < V; i++)
-        visited[i] = false;
+        // if last vertex is the desired destination
+        // then print the path
+        if (last == dst)
+            printpath(path);
 
-    // Call the recursive helper function to print all paths
-    printAllPathsUtil(s, d, visited, path, path_index);
-}
-
-// A recursive function to print all paths from 'u' to 'd'.
-// visited[] keeps track of vertices in current path.
-// path[] stores actual vertices and path_index is current
-// index in path[]
-void Graph::printAllPathsUtil(int u, int d, bool visited[],
-    int path[], int& path_index)
-{
-    // Mark the current node and store it in path[]
-    visited[u] = true;
-    path[path_index] = u;
-    path_index++;
-
-    // If current vertex is same as destination, then print
-    // current path[]
-    if (u == d) {
-        for (int i = 0; i < path_index; i++)
-            cout << path[i] << " ";
-        cout << endl;
+        // traverse to all the nodes connected to
+        // current vertex and push new path to queue
+        for (int i = 0; i < g[last].size(); i++) {
+            if (isNotVisited(g[last][i], path)) {
+                vector<int> newpath(path);
+                newpath.push_back(g[last][i]);
+                q.push(newpath);
+            }
+        }
     }
-    else // If current vertex is not destination
-    {
-        // Recur for all the vertices adjacent to current
-        // vertex
-        list<int>::iterator i;
-        for (i = adj[u].begin(); i != adj[u].end(); ++i)
-            if (!visited[*i])
-                printAllPathsUtil(*i, d, visited, path,
-                    path_index);
-    }
-
-    // Remove current vertex from path[] and mark it as
-    // unvisited
-    path_index--;
-    visited[u] = false;
 }
 
-// Driver program
+void addEdge(vector<vector<int> > g,int u, int v)
+{
+    g[u].push_back(v);
+    g[v].push_back(u);
+}
+
+// driver program
 int main()
 {
-    // Create a graph given in the above diagram
-    Graph g(8);
-    g.addEdge(0, 1);
-    g.addEdge(0, 3);
-    g.addEdge(0, 5);
-    g.addEdge(1, 2);
-    g.addEdge(1, 6);
-    g.addEdge(2, 7);
-    g.addEdge(2, 3);
-    g.addEdge(3, 4);
-    g.addEdge(4, 5);
-    g.addEdge(4, 7);
-    g.addEdge(5, 6);
-    g.addEdge(6, 7);
+    vector<vector<int> > g;
+    // number of vertices
+    int v = 0;
+    cout << "Enter the number of V: ";
+    cin >> v;
+    int edge = 0;
+    cout << "Enter the number of E: ";
+    cin >> edge;
+    g.resize(v);
+    while (edge--) {
+        int x, y;
+        cin >> x >> y;
+        g[x].push_back(y);
+        g[y].push_back(x);
+    }
 
-    int s = 0, d = 7;
-    cout << "Following are all different paths from " << s << " to " << d << endl;
-    g.printAllPaths(s, d);
+    int src = 0, dst = 0;
+    cout << "Enter a and b : ";
+    cin >> src >> dst;
+    cout << "path from src " << src << " to dst " << dst << " are \n";
+
+    // function for finding the paths
+    findpaths(g, src, dst, v);
 
     return 0;
 }
