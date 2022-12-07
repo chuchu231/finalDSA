@@ -1,12 +1,10 @@
-// C++ program to print all paths of source to
-// destination in given graph
+
 #include <iostream>
 #include <vector>
 #include <queue>
 using namespace std;
 
-// utility function for printing
-// the found path in graph
+
 void printpath(vector<int>& path)
 {
     int size = path.size();
@@ -15,8 +13,7 @@ void printpath(vector<int>& path)
     cout << endl;
 }
 
-// utility function to check if current
-// vertex is already present in path
+
 int isNotVisited(int x, vector<int>& path)
 {
     int size = path.size();
@@ -26,8 +23,6 @@ int isNotVisited(int x, vector<int>& path)
     return 1;
 }
 
-// utility function for finding paths in graph
-// from source to destination
 void findpaths(vector<vector<int> >& g, int src, int dst, int v)
 {
     // create a queue which stores
@@ -60,7 +55,7 @@ void findpaths(vector<vector<int> >& g, int src, int dst, int v)
     }
 }
 
-// driver program
+// program
 int main()
 {
     vector<vector<int> > g;
